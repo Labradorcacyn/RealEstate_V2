@@ -1,0 +1,401 @@
+{
+	"info": {
+		"_postman_id": "5d3d3fbe-0a89-4d6f-9e14-559ea8826ebe",
+		"name": "RealEstate",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Viviendas",
+			"item": [
+				{
+					"name": "Lista viviendas paginada",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}vivienda/",
+							"host": [
+								"{{API_BASE}}vivienda"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ver Detalle Vivienda y Propietario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}vivienda/1",
+							"host": [
+								"{{API_BASE}}vivienda"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Se crea una vivienda y un propietario simultáneo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\":\"titulo\",\r\n    \"precio\":213,\r\n    \"descripcion\":\"hololo\",\r\n    \"tipo\":\"Venta\",\r\n    \"nombre\":\"Gustavo\",\r\n    \"metrosCuadrados\":232134,\r\n    \"direccion\":\"sadsad\",\r\n\r\n    \"provincia\":\"22222222\",\r\n    \"codPostal\":\"4444444\",\r\n    \"latLng\":\"3333\",\r\n    \"tienePiscina\":true,\r\n    \"tieneGaraje\":false,\r\n    \"tieneAscensor\":true,\r\n    \"avatar\":\"aaaa\",\r\n    \"numBanos\":2,\r\n    \"numHabitaciones\":23\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE}}vivienda/",
+							"host": [
+								"{{API_BASE}}vivienda"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Se crea una vivienda y un propietario BadRequest",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\":\"titulo\",\r\n    \"precio\":213,\r\n    \"descripcion\":\"hololo\",\r\n   \r\n    \"avatar\":\"aaaa\",\r\n    \"numBanos\":2,\r\n    \"numHabitaciones\":23\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE}}vivienda/",
+							"host": [
+								"{{API_BASE}}vivienda"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Se crea una vivienda y se escoge un propieario existente",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\":\"titulo\",\r\n    \"descripcion\":\"hololo\",\r\n    \"tipo\":\"Venta\",\r\n    \"id\":\"2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE}}vivienda/",
+							"host": [
+								"{{API_BASE}}vivienda"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizo los datos de una vivienda",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\": \"Ático\",\r\n    \"descripcion\": \"Ático muy luminoso y amplio\",\r\n    \"tienePiscina\": true,\r\n    \"tieneAscensor\": false,\r\n    \"tieneGaraje\": true,\r\n    \"numHabitaciones\": 5,\r\n    \"numBanos\": 2,\r\n    \"precio\": 1500,\r\n    \"metrosCuadrados\": 135,\r\n    \"tipo\": 1,\r\n    \"id\": 3\r\n   \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vivienda/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vivienda",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrar una vivienda y sus intereses",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}vivienda/1",
+							"host": [
+								"{{API_BASE}}vivienda"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lista vivienda parametros",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/vivienda/filtro/?search=provincia:Sevill",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vivienda",
+								"filtro",
+								""
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "provincia:Sevill"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inmobiliaria",
+			"item": [
+				{
+					"name": "Encontrar todas las inmobiliarias",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}/inmobiliaria/all",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"inmobiliaria",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Asociar inmobiliara a una vivienda",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}vivienda/1/inmobiliaria/2",
+							"host": [
+								"{{API_BASE}}vivienda"
+							],
+							"path": [
+								"1",
+								"inmobiliaria",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Todas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}/inmobiliaria/",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"inmobiliaria",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Nueva inmobiliaria",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"A pedra Sl\",\r\n    \"email\": \"apedrasl@gmail.com\",\r\n    \"telefono\": \"234567892\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE}}/inmobiliaria/",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"inmobiliaria",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrar por id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE}}/inmobiliaria/2",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"inmobiliaria",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Propietario",
+			"item": [
+				{
+					"name": "Eliminar propietarios y lista de viviendas",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}/propietario/6",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"propietario",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Encontrar todos los propietarios",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE}}/propietario/",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"propietario",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Me interesa",
+			"item": [
+				{
+					"name": "Agrego un me interesa a una vivienda con un interesado logueado",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}/vivienda/id/meinteresa/id",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"vivienda",
+								"id",
+								"meinteresa",
+								"id"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	]
+}
