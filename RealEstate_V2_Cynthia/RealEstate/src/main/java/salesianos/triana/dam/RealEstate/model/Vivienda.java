@@ -1,6 +1,8 @@
 package salesianos.triana.dam.RealEstate.model;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.lang.Nullable;
 import salesianos.triana.dam.RealEstate.users.model.Usuario;
 
@@ -8,6 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -15,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class Vivienda implements Serializable {
 
     @Id
@@ -45,6 +49,9 @@ public class Vivienda implements Serializable {
     @Builder.Default
     @OneToMany(mappedBy = "vivienda")
     private List<Interesa> intereses = new ArrayList<>();
+
+    @CreatedBy
+    private UUID createBy;
 
 
     // HELPERS INMOBILIARIA

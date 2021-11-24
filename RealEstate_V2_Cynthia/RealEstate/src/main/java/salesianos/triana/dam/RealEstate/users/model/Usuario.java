@@ -11,10 +11,7 @@ import salesianos.triana.dam.RealEstate.model.Vivienda;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -27,7 +24,7 @@ public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     private String nombre;
     private String apellidos;

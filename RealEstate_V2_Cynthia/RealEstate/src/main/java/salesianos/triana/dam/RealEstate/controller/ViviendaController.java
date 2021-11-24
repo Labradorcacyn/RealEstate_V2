@@ -31,6 +31,7 @@ import salesianos.triana.dam.RealEstate.users.service.UsuarioService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -126,7 +127,7 @@ public class ViviendaController {
             )
     })
     @PostMapping("/{id1}/meinteresa/{id2}")
-    public ResponseEntity<InteresaDto> addInteresadoVivienda(@PathVariable ("id1")Long idVivienda, @PathVariable("id2") Long idInteresado, @RequestBody InteresaDto iDto){
+    public ResponseEntity<InteresaDto> addInteresadoVivienda(@PathVariable ("id1")Long idVivienda, @PathVariable("id2") UUID idInteresado, @RequestBody InteresaDto iDto){
         if(viviendaService.findById(idVivienda).isEmpty() || usuarioService.findById(idInteresado).isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -207,7 +208,7 @@ public class ViviendaController {
     @DeleteMapping("/{id1}/meinteresa/{id2}")
     public ResponseEntity<?> deleteMeInteresa(
             @Parameter(description = "id de la vivienda") @PathVariable Long id1,
-            @Parameter(description = "id del interesado") @PathVariable Long id2
+            @Parameter(description = "id del interesado") @PathVariable UUID id2
     ) {
         if(viviendaService.findById(id1).isEmpty() || usuarioService.findById(id2).isEmpty()) {
             return ResponseEntity.notFound().build();

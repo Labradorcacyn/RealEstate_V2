@@ -25,7 +25,6 @@ public class ViviendaPropietarioConverterDto {
                 .precio(v.getPrecio())
                 .metrosCuadrados(v.getMetrosCuadrados())
                 .tipo(v.getTipo())
-                .id(v.getId())
                 .nombre(v.getUsuario().getNombre())
                 .apellidos(v.getUsuario().getApellidos())
                 .direccionPropietario(v.getUsuario().getDireccion())

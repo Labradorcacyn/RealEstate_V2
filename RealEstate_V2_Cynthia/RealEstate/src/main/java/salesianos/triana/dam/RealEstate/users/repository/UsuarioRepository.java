@@ -7,8 +7,9 @@ import salesianos.triana.dam.RealEstate.users.model.Usuario;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
 
     @Query("select i from Usuario i")
     public List<Usuario> allInteresados();

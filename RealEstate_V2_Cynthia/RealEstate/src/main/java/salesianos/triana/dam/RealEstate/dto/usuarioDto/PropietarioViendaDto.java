@@ -4,6 +4,7 @@ import lombok.*;
 import salesianos.triana.dam.RealEstate.dto.viviendaDto.DetailViviendaDto;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
@@ -11,7 +12,7 @@ import java.util.List;
 public class PropietarioViendaDto {
 
     // Propietario
-    private Long id;
+    private UUID id;
 
     private String nombre,apellidos,direccionPropietario,email,telefono,avatarPropietario;
 
