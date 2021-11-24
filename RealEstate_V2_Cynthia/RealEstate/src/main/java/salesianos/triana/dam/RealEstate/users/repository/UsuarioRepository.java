@@ -14,9 +14,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
     @Query("select i from Usuario i")
     public List<Usuario> allInteresados();
 
-    @EntityGraph(value = "grafo-interesado", type = EntityGraph.EntityGraphType.FETCH)
-    List<Usuario> findByIdNotNull();
-
     Optional<Usuario> findFirstByEmail(String email);
 
 }

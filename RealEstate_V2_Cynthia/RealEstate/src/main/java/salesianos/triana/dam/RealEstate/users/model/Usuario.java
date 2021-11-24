@@ -98,4 +98,16 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    //HELPERS
+
+    public void addInmobiliariaToPropietario(Inmobiliaria inmobiliaria){
+        this.inmobiliaria_prop=inmobiliaria;
+        inmobiliaria.getGestores().add(this);
+    }
+
+    public void removeInmobiliariaToPropietario(Inmobiliaria inmobiliaria){
+        this.inmobiliaria_prop=null;
+        inmobiliaria.getViviendas().remove(this);
+    }
 }

@@ -1,11 +1,14 @@
 package salesianos.triana.dam.RealEstate.users.dto;
 
 import lombok.*;
+import salesianos.triana.dam.RealEstate.model.Inmobiliaria;
 
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor @Builder
-public class CreateUserDto {
+@NoArgsConstructor @AllArgsConstructor
+@Builder
+public class CreateGestorDto {
 
+    private Long inmobiliaria;
     private String fullName;
     private String direccion;
     private String telefono;

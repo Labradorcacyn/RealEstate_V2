@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5d3d3fbe-0a89-4d6f-9e14-559ea8826ebe",
+		"_postman_id": "9a9eea24-6c57-46a2-bfda-dbac07c900eb",
 		"name": "RealEstate",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -358,6 +358,15 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Register Propietario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
 				}
 			]
 		},
@@ -370,15 +379,15 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{API_BASE}}/vivienda/id/meinteresa/id",
+							"raw": "{{API_BASE}}/vivienda/2/meinteresa/1",
 							"host": [
 								"{{API_BASE}}"
 							],
 							"path": [
 								"vivienda",
-								"id",
+								"2",
 								"meinteresa",
-								"id"
+								"1"
 							]
 						}
 					},
@@ -387,15 +396,178 @@
 			]
 		},
 		{
-			"name": "New Request",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": ""
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Ana Topacio\",\r\n    \"direccion\": \"sdsd\",\r\n    \"telefono\": \"654023154\",\r\n    \"avatar\": \"img.png\",\r\n    \"email\": \"anatopacio@gmail.com\",\r\n    \"password\": \"usuario\",\r\n    \"password2\": \"usuario\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE}}/auth/register/admin",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"auth",
+								"register",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Propietario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.collectionVariables.set(\"request_token\", jsonData.request_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Ana Topacio\",\r\n    \"direccion\": \"sdsd\",\r\n    \"telefono\": \"654023154\",\r\n    \"avatar\": \"img.png\",\r\n    \"email\": \"anatopacio@gmail.com\",\r\n    \"password\": \"usuario\",\r\n    \"password2\": \"usuario\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE}}/auth/register/user",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"auth",
+								"register",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Gestor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Ana Topacio\",\r\n    \"direccion\": \"sdsd\",\r\n    \"telefono\": \"654023154\",\r\n    \"avatar\": \"img.png\",\r\n    \"email\": \"anatopacio@gmail.com\",\r\n    \"password\": \"usuario\",\r\n    \"password2\": \"usuario\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE}}/auth/register/gestor",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"auth",
+								"register",
+								"gestor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"token\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"anatopacio@gmail.com\",\r\n    \"password\": \"usuario\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE}}/auth/login",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_BASE",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"value": "",
+			"disabled": true
 		}
 	]
 }
