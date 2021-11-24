@@ -6,6 +6,6 @@ import lombok.*;
 @Getter @Setter
 public class PostInteresaDto {
 
-    private String nombre, apellidos, direccion, email, telefono, avatar, mensaje;
+    private String fullName, direccion, email, telefono, avatar, mensaje;
 
 }

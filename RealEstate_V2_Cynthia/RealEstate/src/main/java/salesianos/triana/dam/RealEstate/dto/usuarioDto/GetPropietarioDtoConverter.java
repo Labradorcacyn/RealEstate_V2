@@ -9,8 +9,7 @@ public class GetPropietarioDtoConverter {
     public GetPropietarioDto propietarioToDto(Usuario p){
         return GetPropietarioDto.builder()
                 .id(p.getId())
-                .nombre(p.getNombre())
-                .apellidos(p.getApellidos())
+                .fullName(p.getFullName())
                 .avatar(p.getAvatar())
                 .direccion(p.getDireccion())
                 .email(p.getEmail())
@@ -21,8 +20,7 @@ public class GetPropietarioDtoConverter {
     public Usuario dtoToPropietario(GetPropietarioDto pdto){
         return Usuario.builder()
                 .id(pdto.getId())
-                .nombre(pdto.getNombre())
-                .apellidos(pdto.getApellidos())
+                .fullName(pdto.getFullName())
                 .avatar(pdto.getAvatar())
                 .direccion(pdto.getDireccion())
                 .email(pdto.getEmail())

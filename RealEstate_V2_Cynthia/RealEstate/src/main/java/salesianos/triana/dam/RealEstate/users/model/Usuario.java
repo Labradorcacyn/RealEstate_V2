@@ -1,5 +1,7 @@
 package salesianos.triana.dam.RealEstate.users.model;
+import org.hibernate.annotations.Parameter;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,10 +13,7 @@ import salesianos.triana.dam.RealEstate.model.Vivienda;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -26,11 +25,21 @@ public class Usuario implements UserDetails {
     private static final long serialVersionUID = 3172893250076562407L;
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator",
+            parameters = {
+                    @Parameter(
+                            name = "uuid_gen_strategy_class",
+                            value = "org.hibernate.id.uuid.CustomVersionOneStrategy"
+                    )
+            }
+    )
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
-    private String nombre;
-    private String apellidos;
+    private String fullName;
     private String direccion;
 
     @NaturalId
@@ -41,15 +50,15 @@ public class Usuario implements UserDetails {
     private String avatar;
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Builder.Default
     private LocalDateTime lastPasswordChangeAt = LocalDateTime.now();
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    private Set<UserRole> role;
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     @Builder.Default
@@ -64,13 +73,11 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.stream().map(r -> new SimpleGrantedAuthority("ROLE" + r.name())).collect(Collectors.toList());
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
-    public String getUsername() {
-        return null;
-    }
+    public String getUsername() {return email;}
 
     @Override
     public boolean isAccountNonExpired() {

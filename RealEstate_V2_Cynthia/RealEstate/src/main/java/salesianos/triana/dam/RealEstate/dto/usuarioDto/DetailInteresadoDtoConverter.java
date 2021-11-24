@@ -13,8 +13,7 @@ public class DetailInteresadoDtoConverter {
 
     public DetailInteresadoDto interesadoToDetailInteresadoDto(Usuario i){
         return DetailInteresadoDto.builder()
-                .nombre(i.getNombre())
-                .apellidos(i.getApellidos())
+                .fullName(i.getFullName())
                 .direccion(i.getDireccion())
                 .email(i.getEmail())
                 .telefono(i.getTelefono())

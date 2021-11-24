@@ -15,6 +15,7 @@ import salesianos.triana.dam.RealEstate.users.model.Usuario;
 import salesianos.triana.dam.RealEstate.users.service.UsuarioService;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -64,7 +65,7 @@ public class InteresadoController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<DetailInteresadoDto> getInteresado(
-            @PathVariable Long id
+            @PathVariable UUID id
     ) {
         if(interesadoService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();

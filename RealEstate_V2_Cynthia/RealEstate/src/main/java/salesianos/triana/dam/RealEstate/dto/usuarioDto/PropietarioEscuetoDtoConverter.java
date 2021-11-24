@@ -9,8 +9,7 @@ public class PropietarioEscuetoDtoConverter {
     public PropietarioEscuetoDto propietarioToPropietarioEscuetoDto(Usuario p){
         return PropietarioEscuetoDto.builder()
                 .id(p.getId())
-                .nombre(p.getNombre())
-                .apellido(p.getApellidos())
+                .fullName(p.getFullName())
                 .build();
     }
 

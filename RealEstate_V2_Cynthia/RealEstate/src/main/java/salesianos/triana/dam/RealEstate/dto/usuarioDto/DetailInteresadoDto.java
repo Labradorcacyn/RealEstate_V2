@@ -9,7 +9,7 @@ import java.util.List;
 @Getter @Setter
 public class DetailInteresadoDto {
 
-    private String nombre, apellidos, direccion, email, telefono, avatar;
+    private String fullName, direccion, email, telefono, avatar;
     private List<ViviendaListaDto> viviendas;
 
 }

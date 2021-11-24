@@ -23,6 +23,7 @@ import salesianos.triana.dam.RealEstate.users.service.UsuarioService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -68,7 +69,7 @@ public class UsuarioController {
     })
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/{id}")
-    public ResponseEntity <PropietarioViendaDto> getDetailPropietario(@PathVariable ("id") Long id){
+    public ResponseEntity <PropietarioViendaDto> getDetailPropietario(@PathVariable ("id") UUID id){
         Optional<Usuario> p = usuarioService.findById(id);
         if(p.isEmpty())
             return ResponseEntity.noContent().build();
@@ -105,7 +106,7 @@ public class UsuarioController {
                     content = @Content)
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePropietario(@PathVariable("id")Long idProp) {
+    public ResponseEntity<?> deletePropietario(@PathVariable("id") UUID idProp) {
         if (usuarioService.findById(idProp).isEmpty()) {
             return ResponseEntity.noContent().build();
         } else {
@@ -116,7 +117,7 @@ public class UsuarioController {
 
     /******************************************************************************************************/
 
-    @PostMapping("/nuevo")
+    /*@PostMapping("/nuevo")
     public ResponseEntity<GetUserDto> newUser(@RequestBody CreateUserDto newUser){
         try{
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -125,5 +126,5 @@ public class UsuarioController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
-
+*/
 }

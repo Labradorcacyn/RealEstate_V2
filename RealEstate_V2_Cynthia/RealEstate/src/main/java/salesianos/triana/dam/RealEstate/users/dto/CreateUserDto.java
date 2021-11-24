@@ -6,6 +6,7 @@ import lombok.*;
 @NoArgsConstructor @AllArgsConstructor @Builder
 public class CreateUserDto {
 
+    private String fullName;
     private String email;
     private String password;
     private String avatar;

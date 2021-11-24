@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import salesianos.triana.dam.RealEstate.model.Tipo;
 
+import java.util.UUID;
+
 @Getter
 @Builder
 public class ViviendaPropietarioDto {
@@ -18,7 +20,7 @@ public class ViviendaPropietarioDto {
     private Tipo tipo;
 
     // Propietario
-    private Long id;
+    private UUID id;
     private String nombre,apellidos,direccionPropietario,email,telefono,avatarPropietario;
 
     // Inmobiliaria
