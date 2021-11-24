@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import salesianos.triana.dam.RealEstate.dto.InmobiliariaDto.ViviendaListaDto;
 import salesianos.triana.dam.RealEstate.dto.interesaDto.InteresaDto;
@@ -98,6 +99,7 @@ public class ViviendaController {
                     content = @Content)
     })
 
+    @PreAuthorize("hasRole('PROPIETARIO')")
     @PostMapping ("/")
     public ResponseEntity<ViviendaDetalleDto> addVivienda(@RequestBody ViviendaPropietarioDto dto){
         Vivienda v=viviendaPropietarioConverterDto.getVivienda(dto);
@@ -159,6 +161,7 @@ public class ViviendaController {
                     }
             )
     })
+    @PreAuthorize("hasRole('PROPIETARIO')")
     @PostMapping("/{id}/meinteresa")
     public ResponseEntity<?> addNuevoInteresadoAVivienda(
             @PathVariable("id") Long id,

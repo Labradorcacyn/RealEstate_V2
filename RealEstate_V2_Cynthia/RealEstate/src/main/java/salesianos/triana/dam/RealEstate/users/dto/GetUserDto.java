@@ -2,8 +2,6 @@ package salesianos.triana.dam.RealEstate.users.dto;
 
 import lombok.*;
 
-import java.util.Set;
-
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 @Builder

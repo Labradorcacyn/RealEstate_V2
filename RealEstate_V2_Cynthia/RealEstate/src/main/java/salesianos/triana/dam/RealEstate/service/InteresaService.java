@@ -1,6 +1,5 @@
 package salesianos.triana.dam.RealEstate.service;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import salesianos.triana.dam.RealEstate.model.Interesa;

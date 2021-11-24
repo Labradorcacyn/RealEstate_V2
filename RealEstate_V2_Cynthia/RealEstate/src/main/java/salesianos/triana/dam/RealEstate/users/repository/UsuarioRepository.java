@@ -1,6 +1,5 @@
 package salesianos.triana.dam.RealEstate.users.repository;
 
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import salesianos.triana.dam.RealEstate.users.model.Usuario;

@@ -1,7 +1,6 @@
 package salesianos.triana.dam.RealEstate.users.dto;
 
 import lombok.*;
-import salesianos.triana.dam.RealEstate.model.Inmobiliaria;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor

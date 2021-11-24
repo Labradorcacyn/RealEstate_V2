@@ -1,7 +1,6 @@
 package salesianos.triana.dam.RealEstate.users.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,13 +12,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import salesianos.triana.dam.RealEstate.dto.usuarioDto.*;
 import salesianos.triana.dam.RealEstate.security.dto.JwtUserResponse;
 import salesianos.triana.dam.RealEstate.security.dto.LoginDto;
@@ -28,7 +27,6 @@ import salesianos.triana.dam.RealEstate.users.dto.CreateGestorDto;
 import salesianos.triana.dam.RealEstate.users.dto.CreateUserDto;
 import salesianos.triana.dam.RealEstate.users.dto.GetUserDto;
 import salesianos.triana.dam.RealEstate.users.dto.UserDtoConverter;
-import salesianos.triana.dam.RealEstate.users.model.UserRole;
 import salesianos.triana.dam.RealEstate.users.model.Usuario;
 import salesianos.triana.dam.RealEstate.users.service.UsuarioService;
 
@@ -119,6 +117,7 @@ public class UsuarioController {
             return ResponseEntity.ok(userDtoConverter.converUserToGetUserDto(saved));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/auth/register/admin")
     public ResponseEntity<GetUserDto> newAdmin (@RequestBody CreateUserDto createUserDto){
         Usuario saved = usuarioService.registrarAdmin(createUserDto);
@@ -130,6 +129,7 @@ public class UsuarioController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/auth/register/gestor")
     public ResponseEntity<GetUserDto> newGestor (@RequestBody CreateGestorDto createGestorDto){
         Usuario saved = usuarioService.registrarGestor(createGestorDto);
@@ -182,14 +182,17 @@ public class UsuarioController {
                     content = @Content)
     })
     @CrossOrigin(origins = "http://localhost:4200")
+    //@PreAuthorize("hasAnyRole('ADMIN'),('PROPIETARIO')")
     @GetMapping("/propietario/{id}")
     public ResponseEntity <PropietarioViendaDto> getDetailPropietario(@PathVariable ("id") UUID id){
-        Optional<Usuario> p = usuarioService.findById(id);
-        if(p.isEmpty())
-            return ResponseEntity.noContent().build();
-        PropietarioViendaDto propietarioViendaDto = propietarioViviendaDtoConverter.propietarioToPropietarioVviendaDto(p.get());
-        return ResponseEntity.ok().body(propietarioViendaDto);
 
+        Optional<Usuario> u = usuarioService.findById(id);
+
+        if(u.isPresent()){
+            PropietarioViendaDto propietarioViendaDto = propietarioViviendaDtoConverter.propietarioToPropietarioVviendaDto(u.get());
+            return ResponseEntity.ok().body(propietarioViendaDto);
+        }
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Devuelve la lista de propietarios SIN paginar y de manera escueta")
@@ -243,6 +246,7 @@ public class UsuarioController {
                                     array = @ArraySchema(schema = @Schema(implementation = GetInteresadosListaDto.class)))
                     })
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/interesado/")
     public ResponseEntity<List<GetInteresadosListaDto>> getAllInteresados() {
         List<Usuario> lista = usuarioService.getInteresados();
@@ -283,3 +287,5 @@ public class UsuarioController {
         return usuarioService.findAll().stream().map(dtoConverter::InteresadoToGetInteresadosDto).collect(Collectors.toList());
     }
 }
+
+

@@ -19,11 +19,8 @@ import salesianos.triana.dam.RealEstate.users.model.Usuario;
 import salesianos.triana.dam.RealEstate.users.repository.UsuarioRepository;
 import salesianos.triana.dam.RealEstate.service.base.BaseService;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor  // Para poder inyectar
@@ -136,7 +133,6 @@ public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository
             return null;
         }
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

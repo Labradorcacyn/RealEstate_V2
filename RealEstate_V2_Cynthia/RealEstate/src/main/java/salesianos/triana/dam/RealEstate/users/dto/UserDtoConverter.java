@@ -1,10 +1,7 @@
 package salesianos.triana.dam.RealEstate.users.dto;
 
 import org.springframework.stereotype.Component;
-import salesianos.triana.dam.RealEstate.users.model.UserRole;
 import salesianos.triana.dam.RealEstate.users.model.Usuario;
-
-import java.util.stream.Collectors;
 
 @Component
 public class UserDtoConverter {

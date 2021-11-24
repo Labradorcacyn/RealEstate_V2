@@ -14,7 +14,6 @@ import salesianos.triana.dam.RealEstate.model.Vivienda;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 @Builder
