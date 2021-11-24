@@ -18,14 +18,7 @@ import salesianos.triana.dam.RealEstate.users.service.CustomUserDetailsService;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-/* Ya no ignoramos la seguridad
-    @Override
-    //Ignora la seguridad para las peticiones
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().anyRequest();
-    }*/
 
-    //private final CustomBasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint;
     private final CustomUserDetailsService customUserDetailsService;
     private final PasswordEncoder passwordEncoder;
 
@@ -33,23 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder);
     }
-
-    /*@Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .httpBasic()
-                .authenticationEntryPoint(customBasicAuthenticationEntryPoint)
-                .and() //Gestionamos la seguridad de las peticiones //Configuramos el control de acceso
-                .authorizeRequests()
-                    .antMatchers(HttpMethod.GET, "/producto/**", "/lote/**").hasRole("PROPIETARIO")
-                    .antMatchers(HttpMethod.POST, "/producto/**", "/lote/**").hasRole("ADMIN")
-                    .antMatchers(HttpMethod.PUT, "/producto/**").hasRole("ADMIN")
-                    .antMatchers(HttpMethod.DELETE, "/producto/**").hasRole("ADMIN")
-                    .antMatchers(HttpMethod.POST, "/pedido/**").hasAnyRole("PROPIETARIO","ADMIN")
-                    .anyRequest().authenticated()
-                .and()
-                .csrf().disable();
-    }*/
 
     @Bean
     @Override

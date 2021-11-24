@@ -117,7 +117,7 @@ public class UsuarioController {
 
     /******************************************************************************************************/
 
-    @PostMapping("/nuevo")
+    /*@PostMapping("/nuevo")
     public ResponseEntity<GetUserDto> newUser(@RequestBody CreateUserDto newUser){
         try{
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -126,5 +126,5 @@ public class UsuarioController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
-
+*/
 }

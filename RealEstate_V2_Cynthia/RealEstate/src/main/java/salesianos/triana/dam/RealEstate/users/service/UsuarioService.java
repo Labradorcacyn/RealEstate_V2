@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import salesianos.triana.dam.RealEstate.error.exceptions.NewUserWithDifferentPasswordException;
 import salesianos.triana.dam.RealEstate.users.dto.CreateUserDto;
 import salesianos.triana.dam.RealEstate.users.model.UserRole;
 import salesianos.triana.dam.RealEstate.users.model.Usuario;
@@ -38,12 +37,12 @@ public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository
     public Optional<Usuario> findByEmail (String email){
         return this.repository.findFirstByEmail(email);
     }
-
+/*
     //Método para crear usuario
     public Usuario newUSer(CreateUserDto user){ //Recogemos nuestro CreateUserDto
-        /*user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Stream.of(UserRole.PROPIETARIO).collect(Collectors.toSet()));
-        return save(user);*/
+        return save(user);
 
         //Comprobamos si las contraseñas cohinciden
         //Creamos un usuario a partir del dto para almacenarlo a través del servicio
@@ -63,7 +62,7 @@ public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository
         }else{
             throw new NewUserWithDifferentPasswordException();
         }
-    }
+    }*/
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

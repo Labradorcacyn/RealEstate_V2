@@ -9,8 +9,7 @@ public class GetInteresadosDtoConverter {
     public GetInteresadosDto InteresadoToGetInteresadosDto(Usuario i){
         return GetInteresadosDto.builder()
                 .id(i.getId())
-                .nombre(i.getNombre())
-                .apellidos(i.getApellidos())
+                .fullName(i.getFullName())
                 .build();
     }
 }

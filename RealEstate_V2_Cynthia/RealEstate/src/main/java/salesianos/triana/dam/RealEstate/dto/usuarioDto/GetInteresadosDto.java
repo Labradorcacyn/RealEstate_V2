@@ -11,6 +11,5 @@ import java.util.UUID;
 @Builder
 public class GetInteresadosDto {
     private UUID id;
-    private String nombre;
-    private String apellidos;
+    private String fullName;
 }

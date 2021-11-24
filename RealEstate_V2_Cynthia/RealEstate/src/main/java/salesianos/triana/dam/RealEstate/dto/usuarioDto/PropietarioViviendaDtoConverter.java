@@ -9,8 +9,7 @@ public class PropietarioViviendaDtoConverter {
     public PropietarioViendaDto propietarioToPropietarioVviendaDto(Usuario p){
     return PropietarioViendaDto.builder()
             .id(p.getId())
-            .nombre(p.getNombre())
-            .apellidos(p.getApellidos())
+            .fullName(p.getFullName())
             .direccionPropietario(p.getDireccion())
             .email(p.getEmail())
             .telefono(p.getTelefono())

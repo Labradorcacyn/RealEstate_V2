@@ -10,8 +10,7 @@ import java.util.UUID;
 @Builder
 public class GetPropietarioDto {
     private UUID id;
-    private String nombre;
-    private String apellidos;
+    private String fullName;
     private String direccion;
     private String email;
     private String telefono;

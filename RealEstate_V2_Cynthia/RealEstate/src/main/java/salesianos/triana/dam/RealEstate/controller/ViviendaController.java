@@ -167,13 +167,12 @@ public class ViviendaController {
         if(viviendaService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        if(dto.getNombre() == null || dto.getApellidos() == null || dto.getDireccion() == null || dto.getEmail() == null || dto.getTelefono() == null || dto.getAvatar() == null) {
+        if(dto.getFullName() == null || dto.getDireccion() == null || dto.getEmail() == null || dto.getTelefono() == null || dto.getAvatar() == null) {
             ResponseEntity.badRequest().build();
         }
         Vivienda vivienda = viviendaService.findById(id).get();
         Usuario interesado = Usuario.builder()
-                .nombre(dto.getNombre())
-                .apellidos(dto.getApellidos())
+                .fullName(dto.getFullName())
                 .direccion(dto.getDireccion())
                 .email(dto.getEmail())
                 .avatar(dto.getAvatar())

@@ -12,6 +12,5 @@ import java.util.UUID;
 @Builder
 public class PropietarioEscuetoDto {
     private UUID id;
-    private String nombre;
-    private String apellido;
+    private String fullName;
 }

@@ -11,11 +11,10 @@ public class UserDtoConverter {
 
     public GetUserDto converUserToGetUserDto(Usuario user){
         return GetUserDto.builder()
+                .fullName(user.getFullName())
                 .email(user.getEmail())
                 .avatar(user.getAvatar())
-                .roles(user.getRole().stream()
-                        .map(UserRole::name)
-                        .collect(Collectors.toSet()))
+                .role(user.getRole().name())
                 .build();
     }
 }

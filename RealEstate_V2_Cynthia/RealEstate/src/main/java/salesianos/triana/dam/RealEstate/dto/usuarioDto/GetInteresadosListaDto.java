@@ -10,6 +10,6 @@ import java.util.UUID;
 public class GetInteresadosListaDto {
 
     private UUID id;
-    private String nombre, apellidos, direccion, email, telefono, avatar;
+    private String fullName, direccion, email, telefono, avatar;
 
 }

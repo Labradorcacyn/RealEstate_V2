@@ -14,7 +14,7 @@ public class PropietarioViendaDto {
     // Propietario
     private UUID id;
 
-    private String nombre,apellidos,direccionPropietario,email,telefono,avatarPropietario;
+    private String fullName,direccionPropietario,email,telefono,avatarPropietario;
 
     // Vivienda
     private List<DetailViviendaDto> vivienda;
