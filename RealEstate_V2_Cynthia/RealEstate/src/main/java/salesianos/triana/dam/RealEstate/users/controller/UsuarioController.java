@@ -23,6 +23,7 @@ import salesianos.triana.dam.RealEstate.dto.usuarioDto.*;
 import salesianos.triana.dam.RealEstate.security.dto.JwtUserResponse;
 import salesianos.triana.dam.RealEstate.security.dto.LoginDto;
 import salesianos.triana.dam.RealEstate.security.jwt.JwtProvider;
+import salesianos.triana.dam.RealEstate.service.InmobiliariaService;
 import salesianos.triana.dam.RealEstate.users.dto.CreateGestorDto;
 import salesianos.triana.dam.RealEstate.users.dto.CreateUserDto;
 import salesianos.triana.dam.RealEstate.users.dto.GetUserDto;
@@ -43,25 +44,24 @@ import java.util.stream.Collectors;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-    private final GetPropietarioDtoConverter getPropietarioDtoConverter;
     private final PropietarioEscuetoDtoConverter propietarioEscuetoDtoConverter;
     private final PropietarioViviendaDtoConverter propietarioViviendaDtoConverter;
-    private final GetInteresadosListaDtoConverter getInteresadosListaDtoConverter;
     private final GetInteresadosDtoConverter dtoConverter;
     private final DetailInteresadoDtoConverter detailInteresadoDtoConverter;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final UserDtoConverter userDtoConverter;
+    private final InmobiliariaService inmobiliariaService;
 
     /********************************************CONTROLADORES AUTH*******************************************************/
 
     @Operation(summary = "Login usuario")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
+            @ApiResponse(responseCode = "201",
                     description = "Se realiza el login correctamente",
                     content = { @Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "404",
-                    description = "No se realiza el login",
+            @ApiResponse(responseCode = "401",
+                    description = "Sin autorización",
                     content = @Content)
     })
     @PostMapping("/auth/login")
@@ -108,6 +108,18 @@ public class UsuarioController {
                 .build();
     }
 
+    @Operation(summary = "Registrar propietario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se registra el usuario correctamente",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
+                    description = "Usuario ya registrado",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "500",
+                    description = "Falta algún dato",
+                    content = @Content)
+    })
     @PostMapping("/auth/register/user")
     public ResponseEntity<GetUserDto> newUser (@RequestBody CreateUserDto createUserDto){
         Usuario saved = usuarioService.registrarUsuario(createUserDto);
@@ -118,6 +130,18 @@ public class UsuarioController {
             return ResponseEntity.ok(userDtoConverter.converUserToGetUserDto(saved));
     }
 
+    @Operation(summary = "Registrar admin")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se registra el admin correctamente",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
+                    description = "Admin ya registrado",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "500",
+                    description = "Falta algún dato",
+                    content = @Content)
+    })
     @PostMapping("/auth/register/admin")
     public ResponseEntity<GetUserDto> newAdmin (@RequestBody CreateUserDto createUserDto){
         Usuario saved = usuarioService.registrarAdmin(createUserDto);
@@ -129,6 +153,18 @@ public class UsuarioController {
 
     }
 
+    @Operation(summary = "Registrar un gestor")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se registra el gestor correctamente",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
+                    description = "Gestor ya registrado",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "500",
+                    description = "Falta algún dato",
+                    content = @Content)
+    })
     @PostMapping("/auth/register/gestor")
     public ResponseEntity<GetUserDto> newGestor (@RequestBody CreateGestorDto createGestorDto){
         Usuario saved = usuarioService.registrarGestor(createGestorDto);
@@ -151,7 +187,7 @@ public class UsuarioController {
 */
     /*****************************************CONTROLADORES PROPIETARIO****************************************************/
 
-    @Operation(summary = "Devuelve la lista de propietarios paginada")
+   /* @Operation(summary = "Devuelve la lista de propietarios paginada")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se han encontrado las 9 primero propietarios por defecto",
@@ -170,6 +206,28 @@ public class UsuarioController {
             Page<GetPropietarioDto> listadto = lista.map(x -> getPropietarioDtoConverter.propietarioToDto(x));
             return ResponseEntity.ok().body(listadto);
         }
+    }*/
+
+
+    @Operation(summary = "Devuelve la lista de propietarios paginada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se han encontrado las 9 primero propietarios por defecto",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se encuentra la lista de propietarios",
+                    content = @Content)
+    })
+    @GetMapping("/propietario/")
+    public ResponseEntity<List<Usuario>> getAllProp(){
+        //Error en la conversión de la UUID
+        List<Usuario> lista = usuarioService.loadUserByRole(UserRole.PROPIETARIO);
+
+        if(lista.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else{
+            return ResponseEntity.ok().body(lista);
+        }
     }
 
     @Operation(summary = "Devuelve los detalles de un propietario y su lista de viviendas")
@@ -186,12 +244,11 @@ public class UsuarioController {
     public ResponseEntity <PropietarioViendaDto> getDetailPropietario(@PathVariable ("id") UUID id, @AuthenticationPrincipal Usuario usuario){
 
         Optional<Usuario> u = usuarioService.findById(id);
-        Usuario propietario = null;
 
         if(u.isPresent()) {
-            propietario = u.get();
+           Usuario propietario = u.get();
 
-            if (usuario.getRole().equals(UserRole.ADMIN) || usuario.getId().equals(propietario.getId())) {
+            if (usuario.getRole().equals(UserRole.ADMIN) || propietario.getId().equals(usuario.getId())) {
                 PropietarioViendaDto propietarioViendaDto = propietarioViviendaDtoConverter.propietarioToPropietarioVviendaDto(propietario);
                 return ResponseEntity.ok().body(propietarioViendaDto);
             }else {
@@ -231,12 +288,10 @@ public class UsuarioController {
     @DeleteMapping("/propietario/{id}")
     public ResponseEntity<?> deletePropietario(@PathVariable("id") UUID idProp, @AuthenticationPrincipal Usuario usuario) {
         Optional<Usuario> optPropietario = usuarioService.findById(idProp);
-        Usuario propietario = null;
 
         if (optPropietario.isPresent()) {
-            propietario = optPropietario.get();
 
-            if (usuario.getRole().equals(UserRole.ADMIN) || usuario.getId().equals(propietario.getId())) {
+            if (usuario.getRole().equals(UserRole.ADMIN) || usuario.getId().equals(optPropietario.get().getId())) {
                 usuarioService.deleteById(idProp);
                 //return ResponseEntity.ok().build();
                 return ResponseEntity.noContent().build();
@@ -302,5 +357,3 @@ public class UsuarioController {
         return usuarioService.findAll().stream().map(dtoConverter::InteresadoToGetInteresadosDto).collect(Collectors.toList());
     }
 }
-
-

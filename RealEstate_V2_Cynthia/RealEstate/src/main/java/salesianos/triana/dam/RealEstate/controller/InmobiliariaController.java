@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,12 @@ import org.springframework.web.bind.annotation.*;
 import salesianos.triana.dam.RealEstate.dto.InmobiliariaDto.*;
 import salesianos.triana.dam.RealEstate.model.Inmobiliaria;
 import salesianos.triana.dam.RealEstate.service.InmobiliariaService;
+import salesianos.triana.dam.RealEstate.users.model.Usuario;
+import salesianos.triana.dam.RealEstate.users.service.UsuarioService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,6 +38,7 @@ public class InmobiliariaController {
     private final GetInmobiliasDtoConverter getInmobiliasDtoConverter;
     private final InmobiliariaEscuetoDtoConverter inmobiliariaEscuetoDtoConverter;
     private final InmobiliariaViviendasDtoConverter inmobiliariaViviendasDtoConverter;
+    private final UsuarioService usuarioService;
 
     @Operation(summary = "Devuelve la lista de inmobiliarias paginada")
     @ApiResponses(value = {
@@ -123,6 +128,57 @@ public class InmobiliariaController {
         return ResponseEntity.ok().body(inmobiliariaService.findAll().stream().map(inmobiliariaEscuetoDtoConverter::inmobiliariaToInmobiliariaEscuetoDto).collect(Collectors.toList()));
     }
 
+    /******************************************CONTROLADORES GESTORES*****************************************************/
 
+    @Operation(summary = "Devuelve la lista de gestores")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Te devuelve la lista de gestores",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se encuentra la lista de gestores",
+                    content = @Content)
+    })
+    @GetMapping("/{id}/gestor/")
+    public ResponseEntity<List<Usuario>> Allgestores(@PathVariable Long id, @AuthenticationPrincipal Usuario usuario){
+        Optional<Inmobiliaria> inmo = inmobiliariaService.findById(id);
+        List<Usuario> gestores = null;
 
+       if(inmo.isPresent()){
+            gestores = inmo.get().getGestores();
+
+        if(gestores.isEmpty() || inmo.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else{
+            return ResponseEntity.ok().body(inmo.get().getGestores());
+        }
+       //}else if(inmo.get().getGestores().forEach(x -> x.getId().equals(usuario.getId()))){
+           // Para comprobar que el gestor logeado pertenece a esa inmobiliaria
+        }
+       return ResponseEntity.badRequest().build();
+    }
+
+    @Operation(summary = "Borra un gestor")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404",
+                    description = "Se borra y te devuelve no encontrado",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se encuentra el gestor",
+                    content = @Content)
+    })
+    @DeleteMapping("/gestor/{id}")
+    public ResponseEntity<?> DeleteGestor(@PathVariable UUID id, @AuthenticationPrincipal Usuario usuario) {
+        //Optional<Inmobiliaria> inmo = inmobiliariaService.findById(id);
+        //List<Usuario> gestores = null;
+        //if(inmo.get().getGestores().forEach(x -> x.getId().equals(usuario.getId()))){
+            // Para comprobar que el gestor logeado pertenece a esa inmobiliaria
+
+        if(usuarioService.findById(id).isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else{
+            usuarioService.deleteById(id);
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

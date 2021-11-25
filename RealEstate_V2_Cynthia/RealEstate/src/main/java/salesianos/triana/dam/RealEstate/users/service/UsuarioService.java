@@ -3,7 +3,10 @@ package salesianos.triana.dam.RealEstate.users.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +22,7 @@ import salesianos.triana.dam.RealEstate.users.model.Usuario;
 import salesianos.triana.dam.RealEstate.users.repository.UsuarioRepository;
 import salesianos.triana.dam.RealEstate.service.base.BaseService;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,16 +31,16 @@ import java.util.UUID;
 public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository>
     implements UserDetailsService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
     private final InmobiliariaService inmobiliariaService;
-
     private final PasswordEncoder passwordEncoder;
 
     public Optional<Usuario> findByEmail (String email){
         return this.repository.findFirstByEmail(email);
     }
+
+    public List<Usuario> loadUserByRole(UserRole role){return this.repository.findByRole(role);};
+
+    //public Page<Usuario> findAllByRole(UserRole userRole, Pageable pageable){return this.findAllByRole(userRole, pageable);};
 
     /*
     //Método para crear usuario

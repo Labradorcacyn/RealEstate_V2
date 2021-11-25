@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "9a9eea24-6c57-46a2-bfda-dbac07c900eb",
-		"name": "RealEstate",
+		"name": "RealEstate_V2_Cynthia",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -11,14 +11,25 @@
 				{
 					"name": "Lista viviendas paginada",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_BASE}}vivienda/",
+							"raw": "{{API_BASE}}/vivienda/",
 							"host": [
-								"{{API_BASE}}vivienda"
+								"{{API_BASE}}"
 							],
 							"path": [
+								"vivienda",
 								""
 							]
 						}
@@ -28,14 +39,25 @@
 				{
 					"name": "Ver Detalle Vivienda y Propietario",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_BASE}}vivienda/1",
+							"raw": "{{API_BASE}}/vivienda/1",
 							"host": [
-								"{{API_BASE}}vivienda"
+								"{{API_BASE}}"
 							],
 							"path": [
+								"vivienda",
 								"1"
 							]
 						}
@@ -43,13 +65,23 @@
 					"response": []
 				},
 				{
-					"name": "Se crea una vivienda y un propietario simultáneo",
+					"name": "Se crea una vivienda",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"titulo\":\"titulo\",\r\n    \"precio\":213,\r\n    \"descripcion\":\"hololo\",\r\n    \"tipo\":\"Venta\",\r\n    \"nombre\":\"Gustavo\",\r\n    \"metrosCuadrados\":232134,\r\n    \"direccion\":\"sadsad\",\r\n\r\n    \"provincia\":\"22222222\",\r\n    \"codPostal\":\"4444444\",\r\n    \"latLng\":\"3333\",\r\n    \"tienePiscina\":true,\r\n    \"tieneGaraje\":false,\r\n    \"tieneAscensor\":true,\r\n    \"avatar\":\"aaaa\",\r\n    \"numBanos\":2,\r\n    \"numHabitaciones\":23\r\n}",
+							"raw": "{\r\n    \"titulo\":\"Ático\",\r\n    \"precio\":150.000,\r\n    \"descripcion\":\"Ático amplio y luminoso\",\r\n    \"tipo\":\"Venta\",\r\n    \"nombre\":\"Gustavo\",\r\n    \"metrosCuadrados\":120,\r\n    \"direccion\":\"C Agricultores\",\r\n    \"provincia\":\"Sevilla\",\r\n    \"codPostal\":\"41016\",\r\n    \"latLng\":\"3333.8854\",\r\n    \"tienePiscina\":true,\r\n    \"tieneGaraje\":false,\r\n    \"tieneAscensor\":true,\r\n    \"avatar\":\"avatar1.jpg\",\r\n    \"numBanos\":2,\r\n    \"numHabitaciones\":3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -57,11 +89,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_BASE}}vivienda/",
+							"raw": "{{API_BASE}}/vivienda/",
 							"host": [
-								"{{API_BASE}}vivienda"
+								"{{API_BASE}}"
 							],
 							"path": [
+								"vivienda",
 								""
 							]
 						}
@@ -69,39 +102,23 @@
 					"response": []
 				},
 				{
-					"name": "Se crea una vivienda y un propietario BadRequest",
+					"name": "Se crea una vivienda y se escoge un propietario existente",
 					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"titulo\":\"titulo\",\r\n    \"precio\":213,\r\n    \"descripcion\":\"hololo\",\r\n   \r\n    \"avatar\":\"aaaa\",\r\n    \"numBanos\":2,\r\n    \"numHabitaciones\":23\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
 								}
-							}
-						},
-						"url": {
-							"raw": "{{API_BASE}}vivienda/",
-							"host": [
-								"{{API_BASE}}vivienda"
-							],
-							"path": [
-								""
 							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Se crea una vivienda y se escoge un propieario existente",
-					"request": {
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"titulo\":\"titulo\",\r\n    \"descripcion\":\"hololo\",\r\n    \"tipo\":\"Venta\",\r\n    \"id\":\"2\"\r\n}",
+							"raw": "{\r\n    \"titulo\":\"titulo\",\r\n    \"descripcion\":\"hololo\",\r\n    \"tipo\":\"Venta\",\r\n    \"id\":\"2c0a838017d581d0c817d582d11930001\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -109,11 +126,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_BASE}}vivienda/",
+							"raw": "{{API_BASE}}/vivienda/",
 							"host": [
-								"{{API_BASE}}vivienda"
+								"{{API_BASE}}"
 							],
 							"path": [
+								"vivienda",
 								""
 							]
 						}
@@ -123,6 +141,16 @@
 				{
 					"name": "Actualizo los datos de una vivienda",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -135,12 +163,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/vivienda/1",
-							"protocol": "http",
+							"raw": "{{API_BASE}}/vivienda/1",
 							"host": [
-								"localhost"
+								"{{API_BASE}}"
 							],
-							"port": "8080",
 							"path": [
 								"vivienda",
 								"1"
@@ -152,14 +178,25 @@
 				{
 					"name": "Borrar una vivienda y sus intereses",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{API_BASE}}vivienda/1",
+							"raw": "{{API_BASE}}/vivienda/1",
 							"host": [
-								"{{API_BASE}}vivienda"
+								"{{API_BASE}}"
 							],
 							"path": [
+								"vivienda",
 								"1"
 							]
 						}
@@ -169,14 +206,23 @@
 				{
 					"name": "Lista vivienda parametros",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/vivienda/filtro/?search=provincia:Sevill",
+							"raw": "{{API_BASE}}/vivienda/filtro/?search=provincia:Sevill",
 							"host": [
-								"localhost"
+								"{{API_BASE}}"
 							],
-							"port": "8080",
 							"path": [
 								"vivienda",
 								"filtro",
@@ -198,8 +244,18 @@
 			"name": "Inmobiliaria",
 			"item": [
 				{
-					"name": "Encontrar todas las inmobiliarias",
+					"name": "Encontrar todas las inmobiliarias (nombre)",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -218,25 +274,46 @@
 				{
 					"name": "Asociar inmobiliara a una vivienda",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{API_BASE}}vivienda/1/inmobiliaria/2",
+							"raw": "{{API_BASE}}/vivienda/1/inmobiliaria/3",
 							"host": [
-								"{{API_BASE}}vivienda"
+								"{{API_BASE}}"
 							],
 							"path": [
+								"vivienda",
 								"1",
 								"inmobiliaria",
-								"2"
+								"3"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Obtener Todas",
+					"name": "Lista de inmobiliarias",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -255,6 +332,16 @@
 				{
 					"name": "Nueva inmobiliaria",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -280,8 +367,18 @@
 					"response": []
 				},
 				{
-					"name": "Borrar por id",
+					"name": "Borrar inmobiliaria",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -314,16 +411,26 @@
 				{
 					"name": "Eliminar propietarios y lista de viviendas",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{API_BASE}}/propietario/6",
+							"raw": "{{API_BASE}}/propietario/c0a838017d581afc817d581b84970003",
 							"host": [
 								"{{API_BASE}}"
 							],
 							"path": [
 								"propietario",
-								"6"
+								"c0a838017d581afc817d581b84970003"
 							]
 						}
 					},
@@ -335,6 +442,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -360,11 +477,30 @@
 					"response": []
 				},
 				{
-					"name": "Register Propietario",
+					"name": "Datos de un propietario",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
-						"url": null
+						"url": {
+							"raw": "{{API_BASE}}/propietario/c0a838017d581afc817d581b84970003",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"propietario",
+								"c0a838017d581afc817d581b84970003"
+							]
+						}
 					},
 					"response": []
 				}
@@ -376,18 +512,37 @@
 				{
 					"name": "Agrego un me interesa a una vivienda con un interesado logueado",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"mensaje\": \"Me gusta esa casa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{API_BASE}}/vivienda/2/meinteresa/1",
+							"raw": "{{API_BASE}}/vivienda/1/meinteresa/c0a838017d581d0c817d582d11930001",
 							"host": [
 								"{{API_BASE}}"
 							],
 							"path": [
 								"vivienda",
-								"2",
+								"1",
 								"meinteresa",
-								"1"
+								"c0a838017d581d0c817d582d11930001"
 							]
 						}
 					},
@@ -401,11 +556,21 @@
 				{
 					"name": "Register Admin",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\": \"Ana Topacio\",\r\n    \"direccion\": \"sdsd\",\r\n    \"telefono\": \"654023154\",\r\n    \"avatar\": \"img.png\",\r\n    \"email\": \"anatopacio@gmail.com\",\r\n    \"password\": \"usuario\",\r\n    \"password2\": \"usuario\"\r\n}",
+							"raw": "{\r\n    \"fullName\": \"Daniel Lazcano\",\r\n    \"direccion\": \"C. Sierpes\",\r\n    \"telefono\": \"652659878\",\r\n    \"avatar\": \"avatar4.jpg\",\r\n    \"email\": \"daniellazcano@gmail.com\",\r\n    \"password\": \"admin\",\r\n    \"password2\": \"admin\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -441,11 +606,21 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\": \"Ana Topacio\",\r\n    \"direccion\": \"sdsd\",\r\n    \"telefono\": \"654023154\",\r\n    \"avatar\": \"img.png\",\r\n    \"email\": \"anatopacio@gmail.com\",\r\n    \"password\": \"usuario\",\r\n    \"password2\": \"usuario\"\r\n}",
+							"raw": "{\r\n    \"fullName\": \"Jorge Dalma\",\r\n    \"direccion\": \"C. Estrella\",\r\n    \"telefono\": \"635214587\",\r\n    \"avatar\": \"avatar3.jpag\",\r\n    \"email\": \"jorgedalma@gmail.com\",\r\n    \"password\": \"propietario\",\r\n    \"password2\": \"propietario\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -469,11 +644,21 @@
 				{
 					"name": "Register Gestor",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\": \"Ana Topacio\",\r\n    \"direccion\": \"sdsd\",\r\n    \"telefono\": \"654023154\",\r\n    \"avatar\": \"img.png\",\r\n    \"email\": \"anatopacio@gmail.com\",\r\n    \"password\": \"usuario\",\r\n    \"password2\": \"usuario\"\r\n}",
+							"raw": "{\r\n    \"fullName\": \"Ana Topacio\",\r\n    \"direccion\": \"C. Sta. María de Ordás\",\r\n    \"telefono\": \"654023154\",\r\n    \"avatar\": \"avatar2.jpg\",\r\n    \"email\": \"anatopacio@gmail.com\",\r\n    \"password\": \"gestor\",\r\n    \"password2\": \"gestor\",\r\n    \"inmobiliaria\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -509,11 +694,21 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"anatopacio@gmail.com\",\r\n    \"password\": \"usuario\"\r\n}",
+							"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": \"admin1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -528,6 +723,87 @@
 							"path": [
 								"auth",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Quién soy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}/me",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gestor",
+			"item": [
+				{
+					"name": "Gestores de una inmobiliaria",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}/inmobiliaria/2/gestor/",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"inmobiliaria",
+								"2",
+								"gestor",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrar un gestor",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}/inmobiliaria/gestor/1",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"inmobiliaria",
+								"gestor",
+								"1"
 							]
 						}
 					},
@@ -566,8 +842,11 @@
 			"value": ""
 		},
 		{
-			"value": "",
-			"disabled": true
+			"value": ""
+		},
+		{
+			"key": "request_token",
+			"value": ""
 		}
 	]
 }

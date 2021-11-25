@@ -161,7 +161,6 @@ public class ViviendaController {
                     }
             )
     })
-    @PreAuthorize("hasRole('PROPIETARIO')")
     @PostMapping("/{id}/meinteresa")
     public ResponseEntity<?> addNuevoInteresadoAVivienda(
             @PathVariable("id") Long id,
@@ -362,7 +361,7 @@ public class ViviendaController {
     @Operation(summary = "Vinculas una vivienda con una inmobiliaria")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Se ha borrado correctamente",
+                    description = "Se ha asociado correctamente",
                     content = { @Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
                     description = "No se encuentra la vivienda",

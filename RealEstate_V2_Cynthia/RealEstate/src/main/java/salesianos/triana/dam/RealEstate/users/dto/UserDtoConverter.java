@@ -14,4 +14,5 @@ public class UserDtoConverter {
                 .role(user.getRole().name())
                 .build();
     }
+
 }

@@ -21,12 +21,12 @@ public class Interesa implements Serializable {
 
     @ManyToOne
     @MapsId("vivienda_id")
-    @JoinColumn(name = "vivienda_id")
+    @JoinColumn(name = "vivienda_id", foreignKey = @ForeignKey(name = "FK_INTERESA_VIVIENDA"))
     private Vivienda vivienda;
 
     @ManyToOne
     @MapsId("usuario_id")
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id",  foreignKey = @ForeignKey(name = "FK_INTERESA_USUARIO"))
     private Usuario usuario;
 
     @CreatedDate
