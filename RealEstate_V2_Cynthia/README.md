@@ -8,9 +8,10 @@
 > asociaciones entre ellas. Partiendo de 'Vivienda' como base e interrelacionandolo con 'Inmobiliarias',
 > que tienen la posibilidad de estar asociadas a una vivienda, 'propietarios' que son los que tienen estas 'Viviendas'
 > e 'Interesados' que son aquellas personas que pueden interesarse por una 'Vivienda'.
+> Incluye Registro de propietarios, administradores y gestores y Login.
 
 
-![image](https://cdn.discordapp.com/attachments/787363155494830091/907941667447930890/unknown.png)
+![image](https://media.discordapp.net/attachments/771871185943789588/913514683988860978/unknown.png)
 
 ## Instalacion
 
@@ -31,7 +32,8 @@ Las dependencias que usaremos para eeste proyecto serán
 - [SpringWeb] - Será nuestro servidor web local
 - [Lombok] - Una herramienta muy útil que proporcionará atajos a la hora de construir entidades y relaciones.
 - [OpneApi3] - Será con Swagger la manera de comentar los controladores de manera cómoda con anotaciones
-- [SpringJpa] - Será la menera que tengamos de de acceder a la base de datos basada en Hibernate
+- [SpringJpa] - Será la manera que tengamos de de acceder a la base de datos basada en Hibernate
+- [JavaSecurity] - Consiste básicamente en clases abstractas e interfaces que encapsulan conceptos de seguridad como certificados, claves, resumenes de mensajes y firmas digitales
 
 ## Controladores
 
@@ -39,7 +41,7 @@ Las dependencias que usaremos para eeste proyecto serán
 | ------ | ------ |
 | InmobiliariaController | En este controllador meteremos todos los endPoints que tengan que ver con inmobiliarias |
 | InteresaController | En este controllador meteremos todos los endPoints que tengan que ver con Interesa |
-| PropietarioController | En este controllador meteremos todos los endPoints que tengan que ver con inmobiliarias |
+| UsuarioController | En este controllador meteremos todos los endPoints que tengan que ver con inmobiliarias |
 | ViviendaController |En este controllador meteremos todos los endPoints que tengan que ver con inmobiliarias |
 
 
@@ -49,6 +51,8 @@ getListInmobiliaria  //  Devuelve la lista paginada de inmobiliarias
 addInmo  //  Crea una nueva inmobiliaria 
 removeInmo  //  Borra una inmobiliaria
 allInmoShort  //  Devuelve una lista de inmobiliarias SIN paginar y con un contenido reducido
+Allgestores  //  Devuelve la lista de gestor de una inmobiliaria
+DeleteGestor  //  Borra un Gestor
 ```
 
 #### ViviendaController
@@ -68,8 +72,13 @@ filtroViviendas  //  Devuelve una lista filtrada por diferentes parámetros de l
 topViviendas  //  Devuelve una lista de las 10 primeras viviendas por las que más se han interesado
 ```
 
-#### PropietarioController
+#### UsuarioController
 ```sh
+login  //  Login de los usuarios
+quienSoyYo //  Devuelve los datos del usuario logeado
+newUser  //  Registra un nuevo propietario
+newAdmin  //  Registra un nuevo Admin
+newGestor  //  Registra un nuevo Gestor
 getAllProp  //  Devuelve la lista de propietarios paginada
 getDetailPropietario  // Devuelve los detalles de un propietario
 allInteresado  // Devuelve una lista SIN paginar de interesados abreviada
@@ -83,4 +92,4 @@ getAllInteresados  //  Devuelve una lista paginada de todos los interesados
 allInteresados  //  Devuelve la lista SIN paginar de los interesados
 ```
 
- Creado por: Alejandro Bajo, Manuel Fernandez, Cynthia Labrador y Pablo Repiso
+ Creado por: Cynthia Labrador
