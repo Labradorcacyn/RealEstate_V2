@@ -15,4 +15,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
 
     Optional<Usuario> findFirstByEmail(String email);
 
+    //Optional<List<Usuario>> findAllPropietarios();
 }

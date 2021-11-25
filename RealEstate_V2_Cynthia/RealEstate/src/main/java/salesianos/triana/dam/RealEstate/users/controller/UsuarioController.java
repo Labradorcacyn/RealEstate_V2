@@ -27,6 +27,7 @@ import salesianos.triana.dam.RealEstate.users.dto.CreateGestorDto;
 import salesianos.triana.dam.RealEstate.users.dto.CreateUserDto;
 import salesianos.triana.dam.RealEstate.users.dto.GetUserDto;
 import salesianos.triana.dam.RealEstate.users.dto.UserDtoConverter;
+import salesianos.triana.dam.RealEstate.users.model.UserRole;
 import salesianos.triana.dam.RealEstate.users.model.Usuario;
 import salesianos.triana.dam.RealEstate.users.service.UsuarioService;
 
@@ -117,7 +118,6 @@ public class UsuarioController {
             return ResponseEntity.ok(userDtoConverter.converUserToGetUserDto(saved));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/auth/register/admin")
     public ResponseEntity<GetUserDto> newAdmin (@RequestBody CreateUserDto createUserDto){
         Usuario saved = usuarioService.registrarAdmin(createUserDto);
@@ -129,7 +129,6 @@ public class UsuarioController {
 
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/auth/register/gestor")
     public ResponseEntity<GetUserDto> newGestor (@RequestBody CreateGestorDto createGestorDto){
         Usuario saved = usuarioService.registrarGestor(createGestorDto);
@@ -164,6 +163,7 @@ public class UsuarioController {
     @GetMapping("/propietario/")
     public ResponseEntity<?> getAllProp(@PageableDefault(size = 9, page = 0) Pageable pageable){
         Page<Usuario> lista = usuarioService.findAll(pageable);
+
         if(lista.isEmpty()){
             return ResponseEntity.notFound().build();
         }else{
@@ -182,17 +182,23 @@ public class UsuarioController {
                     content = @Content)
     })
     @CrossOrigin(origins = "http://localhost:4200")
-    //@PreAuthorize("hasAnyRole('ADMIN'),('PROPIETARIO')")
     @GetMapping("/propietario/{id}")
-    public ResponseEntity <PropietarioViendaDto> getDetailPropietario(@PathVariable ("id") UUID id){
+    public ResponseEntity <PropietarioViendaDto> getDetailPropietario(@PathVariable ("id") UUID id, @AuthenticationPrincipal Usuario usuario){
 
         Optional<Usuario> u = usuarioService.findById(id);
+        Usuario propietario = null;
 
-        if(u.isPresent()){
-            PropietarioViendaDto propietarioViendaDto = propietarioViviendaDtoConverter.propietarioToPropietarioVviendaDto(u.get());
-            return ResponseEntity.ok().body(propietarioViendaDto);
+        if(u.isPresent()) {
+            propietario = u.get();
+
+            if (usuario.getRole().equals(UserRole.ADMIN) || usuario.getId().equals(propietario.getId())) {
+                PropietarioViendaDto propietarioViendaDto = propietarioViviendaDtoConverter.propietarioToPropietarioVviendaDto(propietario);
+                return ResponseEntity.ok().body(propietarioViendaDto);
+            }else {
+                return ResponseEntity.status(403).build();
+            }
         }
-        return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Devuelve la lista de propietarios SIN paginar y de manera escueta")
@@ -223,15 +229,24 @@ public class UsuarioController {
                     content = @Content)
     })
     @DeleteMapping("/propietario/{id}")
-    public ResponseEntity<?> deletePropietario(@PathVariable("id") UUID idProp) {
-        if (usuarioService.findById(idProp).isEmpty()) {
-            return ResponseEntity.noContent().build();
-        } else {
-            usuarioService.deleteById(idProp);
-            return ResponseEntity.ok().build();
-        }
-    }
+    public ResponseEntity<?> deletePropietario(@PathVariable("id") UUID idProp, @AuthenticationPrincipal Usuario usuario) {
+        Optional<Usuario> optPropietario = usuarioService.findById(idProp);
+        Usuario propietario = null;
 
+        if (optPropietario.isPresent()) {
+            propietario = optPropietario.get();
+
+            if (usuario.getRole().equals(UserRole.ADMIN) || usuario.getId().equals(propietario.getId())) {
+                usuarioService.deleteById(idProp);
+                //return ResponseEntity.ok().build();
+                return ResponseEntity.noContent().build();
+
+            } else {
+                return ResponseEntity.status(403).build();
+            }
+        }
+        return ResponseEntity.noContent().build();
+    }
     /******************************************CONTROLADORES INTERESA*****************************************************/
 
     /*@Operation(summary = "Muestra la lista de todos los interesados")
@@ -246,7 +261,7 @@ public class UsuarioController {
                                     array = @ArraySchema(schema = @Schema(implementation = GetInteresadosListaDto.class)))
                     })
     })
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping("/interesado/")
     public ResponseEntity<List<GetInteresadosListaDto>> getAllInteresados() {
         List<Usuario> lista = usuarioService.getInteresados();

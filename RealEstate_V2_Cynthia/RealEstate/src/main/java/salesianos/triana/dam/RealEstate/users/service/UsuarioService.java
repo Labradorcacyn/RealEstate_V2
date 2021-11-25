@@ -139,4 +139,5 @@ public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository
         return this.repository.findFirstByEmail(email)
                 .orElseThrow(()-> new UsernameNotFoundException(email + " no encontrado"));
     }
+
 }
