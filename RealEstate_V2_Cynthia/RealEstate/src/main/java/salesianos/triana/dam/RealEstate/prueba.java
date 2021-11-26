@@ -49,7 +49,7 @@ public class prueba {
                 .avatar("avatar4.jpg")
                 .build();
 
-        usuarioService.registrarUsuario(propietario);
+        Usuario prop = usuarioService.registrarUsuario(propietario);
 
         CreateGestorDto gestor = CreateGestorDto.builder()
                 .fullName("Marta López")
@@ -86,7 +86,7 @@ public class prueba {
                 .build();
 
         Optional<Inmobiliaria> inmo = inmobiliariaService.findById(2L);
-
+        v.addToPropietario(prop);
         viviendaService.save(v);
         /*if(inmo.isPresent()) {
             g.addInmobiliariaToPropietario(inmo.get());

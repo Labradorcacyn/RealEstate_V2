@@ -16,6 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import salesianos.triana.dam.RealEstate.dto.InmobiliariaDto.ViviendaListaDto;
 import salesianos.triana.dam.RealEstate.dto.interesaDto.InteresaDto;
@@ -27,6 +28,7 @@ import salesianos.triana.dam.RealEstate.dto.viviendaDto.*;
 import salesianos.triana.dam.RealEstate.model.*;
 import salesianos.triana.dam.RealEstate.search.ViviendaSpecificationBuilder;
 import salesianos.triana.dam.RealEstate.service.*;
+import salesianos.triana.dam.RealEstate.users.model.UserRole;
 import salesianos.triana.dam.RealEstate.users.model.Usuario;
 import salesianos.triana.dam.RealEstate.users.service.UsuarioService;
 
@@ -84,9 +86,10 @@ public class ViviendaController {
     @GetMapping("/{id}")
     public ResponseEntity<ViviendaPropietarioDto> getDetallesViviendasPropietario(@PathVariable ("id") Long id){
         final Optional<Vivienda> v=viviendaService.findById(id);
-        if(v.isEmpty() || v.get().getUsuario()==null)
-            return ResponseEntity.notFound().build();
-        return ResponseEntity.ok().body(viviendaPropietarioConverterDto.viviendaToViviendaPropietarioDto(viviendaService.findById(id).get()));
+        if(v.isPresent()) {
+            return ResponseEntity.ok().body(viviendaPropietarioConverterDto.viviendaToViviendaPropietarioDto(viviendaService.findById(id).get()));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @Operation(summary = "Creas una vivienda y un propietario o lo rescatas de la base de datos (el propietario)")
@@ -99,20 +102,24 @@ public class ViviendaController {
                     content = @Content)
     })
 
-    @PreAuthorize("hasRole('PROPIETARIO')")
     @PostMapping ("/")
-    public ResponseEntity<ViviendaDetalleDto> addVivienda(@RequestBody ViviendaPropietarioDto dto){
+    public ResponseEntity<ViviendaDetalleDto> addVivienda(@RequestBody ViviendaPropietarioDto dto, @AuthenticationPrincipal Usuario usuario){
         Vivienda v=viviendaPropietarioConverterDto.getVivienda(dto);
-        Usuario p= viviendaPropietarioConverterDto.getPropietario(dto);
+        Optional <Usuario> prop =  usuarioService.findById(usuario.getId());
+
+        if(prop.isPresent()){
+            Usuario us = prop.get();
+            v.addToPropietario(us);
+            viviendaService.save(v);
+            usuarioService.save(us);
+            return ResponseEntity.status(HttpStatus.CREATED).body(viviendaDetalleDtoConverter.viviendaToDetalleDto(v));
+        }
+
         if(v.getProvincia()==null|| v.getCodPostal()==null || v.getDireccion()==null||
         v.getDescripcion()==null|| v.getPoblacion()==null || v.getTipo()==null || v.getTitulo()==null)
             return ResponseEntity.badRequest().build();
-        if(p.getId()!=null)
-            p=  usuarioService.findById(p.getId()).get();
-        usuarioService.save(p);
-        v.addToPropietario(p);
-        viviendaService.save(v);
-        return ResponseEntity.status(HttpStatus.CREATED).body(viviendaDetalleDtoConverter.viviendaToDetalleDto(v));
+
+        return ResponseEntity.notFound().build();
     }
 
     @Operation(summary = "Añade un nuevo interesa con un interesado existente")
@@ -269,38 +276,44 @@ public class ViviendaController {
                     content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ViviendaDetalleDto> putVivienda(@PathVariable Long id, @RequestBody ViviendaDetalleDto dto) {
-        if (viviendaService.findById(id).isEmpty())
-            return ResponseEntity.noContent().build();
-
-        return ResponseEntity.of(viviendaService.findById(id).map(v->{
-            v.setTitulo(dto.getTitulo());
-            v.setDescripcion(dto.getDescripcion());
-            v.setAvatar(dto.getAvatar());
-            v.setLatLng(dto.getLatLng());
-            v.setDireccion(dto.getDireccion());
-            v.setCodPostal(dto.getCodPostal());
-            v.setProvincia(dto.getProvincia());
-            v.setPoblacion(dto.getPoblacion());
-            v.setTienePiscina(dto.getTienePiscina());
-            v.setTieneGaraje(dto.getTieneGaraje());
-            v.setTieneAscensor(dto.getTieneAscensor());
-            v.setPrecio(dto.getPrecio());
-            v.setMetrosCuadrados(dto.getMetrosCuadrados());
-            v.setNumHabitaciones(dto.getNumHabitaciones());
-            v.setNumBanos(dto.getNumBanos());
-            v.setTipo(dto.getTipo());
-            viviendaService.save(v);
-            return viviendaDetalleDtoConverter.viviendaToDetalleDto(v);
-        }));
+    public ResponseEntity<ViviendaDetalleDto> putVivienda(@PathVariable Long id, @RequestBody ViviendaDetalleDto dto, @AuthenticationPrincipal Usuario usuario) {
+        Optional<Vivienda> vivienda = viviendaService.findById(id);
+        if(vivienda.isPresent()){
+            Vivienda viv = vivienda.get();
+            if(usuario.getRole().equals(UserRole.ADMIN) || viv.getUsuario().getId().equals(usuario.getId())) {
+                return ResponseEntity.of(viviendaService.findById(id).map(v -> {
+                    v.setTitulo(dto.getTitulo());
+                    v.setDescripcion(dto.getDescripcion());
+                    v.setAvatar(dto.getAvatar());
+                    v.setLatLng(dto.getLatLng());
+                    v.setDireccion(dto.getDireccion());
+                    v.setCodPostal(dto.getCodPostal());
+                    v.setProvincia(dto.getProvincia());
+                    v.setPoblacion(dto.getPoblacion());
+                    v.setTienePiscina(dto.getTienePiscina());
+                    v.setTieneGaraje(dto.getTieneGaraje());
+                    v.setTieneAscensor(dto.getTieneAscensor());
+                    v.setPrecio(dto.getPrecio());
+                    v.setMetrosCuadrados(dto.getMetrosCuadrados());
+                    v.setNumHabitaciones(dto.getNumHabitaciones());
+                    v.setNumBanos(dto.getNumBanos());
+                    v.setTipo(dto.getTipo());
+                    viviendaService.save(v);
+                    return viviendaDetalleDtoConverter.viviendaToDetalleDto(v);
+                }));
+            }
+        } return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/interesados")
     public SumaInteresadosDto totalInteresados(@PathVariable Long id){
-        Vivienda v = viviendaService.findById(id).get();
-        SumaInteresadosDto suma = new SumaInteresadosDto();
-        suma.setTotalInteresados(v.getIntereses().size());
-        return suma;
+        Optional<Vivienda> vivienda = viviendaService.findById(id);
+        if(vivienda.isPresent()){
+            Vivienda viv = vivienda.get();
+            SumaInteresadosDto suma = new SumaInteresadosDto();
+            suma.setTotalInteresados(viv.getIntereses().size());
+            return suma;
+        }return null;
     }
 
     @GetMapping(value = "/filtro/", params = {"search"})
@@ -316,7 +329,7 @@ public class ViviendaController {
         return  buildResponseFromQuery(viviendaService.viviendaConSpecification(spec),viviendaListaDtoConverter::viviendaToViviendaListaDto);
     }
 
-    // Muy bien pensado para ahorrar
+
     private ResponseEntity<List<?>> buildResponseFromQuery(List<Vivienda> data, Function<Vivienda, ViviendaListaDto> function) {
         if (data.isEmpty())
             return ResponseEntity.notFound().build();

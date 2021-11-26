@@ -291,7 +291,7 @@ public class UsuarioController {
 
         if (optPropietario.isPresent()) {
 
-            if (usuario.getRole().equals(UserRole.ADMIN) || usuario.getId().equals(optPropietario.get().getId())) {
+            if (usuario.getRole().equals(UserRole.ADMIN) || optPropietario.get().getId().equals(usuario.getId())) {
                 usuarioService.deleteById(idProp);
                 //return ResponseEntity.ok().build();
                 return ResponseEntity.noContent().build();

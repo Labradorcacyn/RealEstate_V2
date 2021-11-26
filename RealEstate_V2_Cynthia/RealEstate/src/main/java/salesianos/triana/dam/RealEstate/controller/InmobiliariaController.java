@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import salesianos.triana.dam.RealEstate.dto.InmobiliariaDto.*;
 import salesianos.triana.dam.RealEstate.model.Inmobiliaria;
 import salesianos.triana.dam.RealEstate.service.InmobiliariaService;
+import salesianos.triana.dam.RealEstate.users.model.UserRole;
 import salesianos.triana.dam.RealEstate.users.model.Usuario;
 import salesianos.triana.dam.RealEstate.users.service.UsuarioService;
 
@@ -142,18 +143,17 @@ public class InmobiliariaController {
     @GetMapping("/{id}/gestor/")
     public ResponseEntity<List<Usuario>> Allgestores(@PathVariable Long id, @AuthenticationPrincipal Usuario usuario){
         Optional<Inmobiliaria> inmo = inmobiliariaService.findById(id);
+        Optional<Usuario> gestor = usuarioService.findById(usuario.getId());
         List<Usuario> gestores = null;
 
-       if(inmo.isPresent()){
-            gestores = inmo.get().getGestores();
+        if(gestor.isPresent()){
+            if(inmo.isPresent()){
 
-        if(gestores.isEmpty() || inmo.isEmpty()){
+            if(usuario.getRole().equals(UserRole.ADMIN) || gestor.get().getId().equals(usuario.getId())){
+                return ResponseEntity.ok().body(inmo.get().getGestores());
+            }
+        }else
             return ResponseEntity.notFound().build();
-        }else{
-            return ResponseEntity.ok().body(inmo.get().getGestores());
-        }
-       //}else if(inmo.get().getGestores().forEach(x -> x.getId().equals(usuario.getId()))){
-           // Para comprobar que el gestor logeado pertenece a esa inmobiliaria
         }
        return ResponseEntity.badRequest().build();
     }
