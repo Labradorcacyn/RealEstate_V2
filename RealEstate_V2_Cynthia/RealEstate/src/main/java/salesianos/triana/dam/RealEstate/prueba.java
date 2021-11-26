@@ -62,7 +62,7 @@ public class prueba {
                 .inmobiliaria(1L)
                 .build();
 
-        usuarioService.registrarGestor(gestor);
+         Usuario g = usuarioService.registrarGestor(gestor);
 
         Vivienda v = Vivienda.builder()
                 .id(1L)
@@ -88,21 +88,11 @@ public class prueba {
         Optional<Inmobiliaria> inmo = inmobiliariaService.findById(2L);
 
         viviendaService.save(v);
-
-        /*Usuario gestor2 = Usuario.builder()
-                .fullName("Juan Goma")
-                .email("juangoma@gmail.com")
-                .password("$2a$10$n1GZZhjxJkGVXp60Hub2OuhhoxT14CnTA9g65ouFEJW1ycLxe/0tu")
-                .telefono("654389087")
-                .direccion("C. Canopus")
-                .avatar("avatar3.jpg")
-                .build();
-        if(inmo.isPresent()){
-            //v.addToInmobiliaria(inmo.get());
-            gestor2.addInmobiliariaToPropietario(inmo.get());
-            usuarioService.save(gestor2);
+        /*if(inmo.isPresent()) {
+            g.addInmobiliariaToPropietario(inmo.get());
+            usuarioService.save(g);
+            inmobiliariaService.save(inmo.get());
         }*/
-
 
 
 

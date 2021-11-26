@@ -8,6 +8,7 @@ public class UserDtoConverter {
 
     public GetUserDto converUserToGetUserDto(Usuario user){
         return GetUserDto.builder()
+                .id(user.getId())
                 .fullName(user.getFullName())
                 .email(user.getEmail())
                 .avatar(user.getAvatar())
