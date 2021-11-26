@@ -50,8 +50,8 @@ public class Vivienda implements Serializable {
     @OneToMany(mappedBy = "vivienda")
     private List<Interesa> intereses = new ArrayList<>();
 
-    @CreatedBy
-    private UUID createBy;
+    //@CreatedBy
+    //private UUID createBy;
 
 
     // HELPERS INMOBILIARIA

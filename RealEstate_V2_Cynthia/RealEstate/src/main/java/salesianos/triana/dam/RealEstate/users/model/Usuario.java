@@ -3,6 +3,7 @@ import org.hibernate.annotations.Parameter;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,7 +28,7 @@ public class Usuario implements UserDetails {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
             name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator",
+            strategy = "org.hibernate.id.UUIDGenerator" ,
             parameters = {
                     @Parameter(
                             name = "uuid_gen_strategy_class",
@@ -36,6 +37,7 @@ public class Usuario implements UserDetails {
             }
     )
     @Column(name = "id", updatable = false, nullable = false)
+    @Type(type = "uuid-char")
     private UUID id;
 
     private String fullName;

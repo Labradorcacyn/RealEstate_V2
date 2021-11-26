@@ -65,6 +65,41 @@
 					"response": []
 				},
 				{
+					"name": "Lista vivienda parametros",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}/vivienda/filtro/?search=provincia:Sevill",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"vivienda",
+								"filtro",
+								""
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "provincia:Sevill"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Se crea una vivienda",
 					"request": {
 						"auth": {
@@ -155,7 +190,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"titulo\": \"Ático\",\r\n    \"descripcion\": \"Ático muy luminoso y amplio\",\r\n    \"tienePiscina\": true,\r\n    \"tieneAscensor\": false,\r\n    \"tieneGaraje\": true,\r\n    \"numHabitaciones\": 5,\r\n    \"numBanos\": 2,\r\n    \"precio\": 1500,\r\n    \"metrosCuadrados\": 135,\r\n    \"tipo\": 1,\r\n    \"id\": 3\r\n   \r\n}",
+							"raw": "{\r\n    \r\n    \"titulo\":\"Ático\",\r\n    \"precio\":150.000,\r\n    \"descripcion\":\"Ático amplio y luminoso\",\r\n    \"tipo\":\"Venta\",\r\n    \"nombre\":\"Gustavo\",\r\n    \"metrosCuadrados\":120,\r\n    \"direccion\":\"C Agricultores\",\r\n    \"provincia\":\"Sevilla\",\r\n    \"codPostal\":\"41016\",\r\n    \"latLng\":\"3333.8854\",\r\n    \"tienePiscina\":true,\r\n    \"tieneGaraje\":false,\r\n    \"tieneAscensor\":true,\r\n    \"avatar\":\"avatar1.jpg\",\r\n    \"numBanos\":2,\r\n    \"numHabitaciones\":3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -202,9 +237,14 @@
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Inmobiliaria",
+			"item": [
 				{
-					"name": "Lista vivienda parametros",
+					"name": "Lista de inmobiliarias",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -219,30 +259,18 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_BASE}}/vivienda/filtro/?search=provincia:Sevill",
+							"raw": "{{API_BASE}}/inmobiliaria/",
 							"host": [
 								"{{API_BASE}}"
 							],
 							"path": [
-								"vivienda",
-								"filtro",
+								"inmobiliaria",
 								""
-							],
-							"query": [
-								{
-									"key": "search",
-									"value": "provincia:Sevill"
-								}
 							]
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Inmobiliaria",
-			"item": [
+				},
 				{
 					"name": "Encontrar todas las inmobiliarias (nombre)",
 					"request": {
@@ -266,6 +294,24 @@
 							"path": [
 								"inmobiliaria",
 								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Datos de una inmobiliaria",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}/inmobiliaria/2",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"inmobiliaria",
+								"2"
 							]
 						}
 					},
@@ -296,34 +342,6 @@
 								"1",
 								"inmobiliaria",
 								"3"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Lista de inmobiliarias",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API_BASE}}/inmobiliaria/",
-							"host": [
-								"{{API_BASE}}"
-							],
-							"path": [
-								"inmobiliaria",
-								""
 							]
 						}
 					},
@@ -409,45 +427,6 @@
 			"name": "Propietario",
 			"item": [
 				{
-					"name": "Eliminar propietarios y lista de viviendas",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{API_BASE}}/propietario/c0a83801-7d5b-15c0-817d-5b45ef790003",
-							"host": [
-								"{{API_BASE}}"
-							],
-							"path": [
-								"propietario",
-								"c0a83801-7d5b-15c0-817d-5b45ef790003"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Encontrar todos los propietarios",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -503,13 +482,52 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_BASE}}/propietario/c0a83801-7d5b-1f46-817d-5b4f710b0003",
+							"raw": "{{API_BASE}}/propietario/c0a83801-7d5c-1895-817d-5c2b104f0003",
 							"host": [
 								"{{API_BASE}}"
 							],
 							"path": [
 								"propietario",
-								"c0a83801-7d5b-1f46-817d-5b4f710b0003"
+								"c0a83801-7d5c-1895-817d-5c2b104f0003"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar propietarios y lista de viviendas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}/propietario/c0a83801-7d5b-15c0-817d-5b45ef790003",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"propietario",
+								"c0a83801-7d5b-15c0-817d-5b45ef790003"
 							]
 						}
 					},
@@ -545,15 +563,43 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_BASE}}/vivienda/1/meinteresa/c0a838017d581d0c817d582d11930001",
+							"raw": "{{API_BASE}}/vivienda/1/meinteresa",
 							"host": [
 								"{{API_BASE}}"
 							],
 							"path": [
 								"vivienda",
 								"1",
-								"meinteresa",
-								"c0a838017d581d0c817d582d11930001"
+								"meinteresa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}/vivienda/1/meinteresa",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"vivienda",
+								"1",
+								"meinteresa"
 							]
 						}
 					},
@@ -564,6 +610,33 @@
 		{
 			"name": "Auth",
 			"item": [
+				{
+					"name": "Quién soy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE}}/me",
+							"host": [
+								"{{API_BASE}}"
+							],
+							"path": [
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Register Admin",
 					"request": {
@@ -658,7 +731,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\": \"Ana Topacio\",\r\n    \"direccion\": \"C. Sta. María de Ordás\",\r\n    \"telefono\": \"654023154\",\r\n    \"avatar\": \"avatar2.jpg\",\r\n    \"email\": \"anatopacio@gmail.com\",\r\n    \"password\": \"gestor\",\r\n    \"password2\": \"gestor\",\r\n    \"inmobiliaria\": 2\r\n}",
+							"raw": "{\r\n    \"fullName\": \"Marta López\",\r\n    \"direccion\": \"C. Sta. María de Ordás\",\r\n    \"telefono\": \"654023154\",\r\n    \"avatar\": \"avatar2.jpg\",\r\n    \"email\": \"martalopez@gmail.com\",\r\n    \"password\": \"gestor\",\r\n    \"password2\": \"gestor\",\r\n    \"inmobiliaria\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -723,33 +796,6 @@
 							"path": [
 								"auth",
 								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Quién soy",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API_BASE}}/me",
-							"host": [
-								"{{API_BASE}}"
-							],
-							"path": [
-								"me"
 							]
 						}
 					},

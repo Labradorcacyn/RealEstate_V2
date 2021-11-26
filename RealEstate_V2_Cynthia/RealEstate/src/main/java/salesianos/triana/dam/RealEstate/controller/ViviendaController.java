@@ -135,21 +135,27 @@ public class ViviendaController {
                     }
             )
     })
-    @PostMapping("/{id1}/meinteresa/{id2}")
-    public ResponseEntity<InteresaDto> addInteresadoVivienda(@PathVariable ("id1")Long idVivienda, @PathVariable("id2") UUID idInteresado, @RequestBody InteresaDto iDto){
-        if(viviendaService.findById(idVivienda).isEmpty() || usuarioService.findById(idInteresado).isEmpty()){
-            return ResponseEntity.notFound().build();
+    @PostMapping("/{id1}/meinteresa")
+    public ResponseEntity<InteresaDto> addInteresadoVivienda(@PathVariable ("id1")Long idVivienda, @RequestBody InteresaDto iDto, @AuthenticationPrincipal Usuario usuario){
+        Optional<Vivienda> vivienda = viviendaService.findById(idVivienda);
+        Optional<Usuario> interesado = usuarioService.findById(usuario.getId());
+
+        if(vivienda.isPresent()) {
+            if (interesado.isPresent()) {
+                Interesa i = interesaDtoConverter.InteresaDtoToInteresa(iDto);
+                Usuario u = interesado.get();
+                Vivienda v = vivienda.get();
+                i.addInteresado(u, v);
+                interesaService.save(i);
+                usuarioService.save(u);
+                viviendaService.save(v);
+                return ResponseEntity.ok().body(interesaDtoConverter.InteresaToInteresaDto(i));
+            }
         }
-        Interesa i = interesaDtoConverter.InteresaDtoToInteresa(iDto);
-        Usuario interesado = usuarioService.findById(idInteresado).orElse(null);
-        Vivienda vivivenda = viviendaService.findById(idVivienda).orElse(null);
-        i.addInteresado(interesado,vivivenda);
-        interesaService.save(i);
-        usuarioService.save(interesado);
-        viviendaService.save(vivivenda);
+        if(vivienda.isEmpty() || interesado.isEmpty())
+        return ResponseEntity.notFound().build();
 
-        return ResponseEntity.ok().body(interesaDtoConverter.InteresaToInteresaDto(i));
-
+        return ResponseEntity.badRequest().build();
     }
 
     @Operation(summary = "Añade un nuevo interesa creando un nuevo interesado")
@@ -213,26 +219,32 @@ public class ViviendaController {
             responseCode = "200",
             content = @Content)
     })
-    @DeleteMapping("/{id1}/meinteresa/{id2}")
+    @DeleteMapping("/{id1}/meinteresa")
     public ResponseEntity<?> deleteMeInteresa(
             @Parameter(description = "id de la vivienda") @PathVariable Long id1,
-            @Parameter(description = "id del interesado") @PathVariable UUID id2
-    ) {
-        if(viviendaService.findById(id1).isEmpty() || usuarioService.findById(id2).isEmpty()) {
+            @AuthenticationPrincipal Usuario usuario) {
+
+        Optional<Usuario> usuar = usuarioService.findById(usuario.getId());
+        Optional<Vivienda> viv = viviendaService.findById(id1);
+
+        if (viviendaService.findById(id1).isEmpty())
             return ResponseEntity.notFound().build();
-        }
-        Vivienda vivienda = viviendaService.findById(id1).get();
-        Usuario interesado = usuarioService.findById(id2).get();
-        boolean enc=false;
-        vivienda.getIntereses().stream().map(i -> {
-            if(i.getUsuario().getId() == interesado.getId()) {
-                interesaService.delete(i);
-                i.removeInteresa(vivienda, interesado);
-                return i;
+
+        if (viv.isPresent()) {
+            if (usuar.isPresent()) {
+                if(usuario.getRole().equals(UserRole.ADMIN) || usuar.get().getId().equals(usuario.getId())){
+                    boolean enc = false;
+                    viv.get().getIntereses().stream().map(i -> {
+                        if (i.getUsuario().getId() == usuar.get().getId()) {
+                            interesaService.delete(i);
+                            i.removeInteresa(viv.get(), usuar.get());
+                        }
+                        return ResponseEntity.notFound().build();
+                    });
+                }
             }
-            return i;
-        });
-        return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @Operation(summary = "Borra un interés de una vivienda y la vivienda pero no su interesado")
@@ -245,25 +257,39 @@ public class ViviendaController {
                     content = @Content)
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteViviendaAndIntereses (@PathVariable ("id") Long id){
+    public ResponseEntity<?> deleteVivienda (@PathVariable ("id") Long id, @AuthenticationPrincipal Usuario usuario){
+        Optional<Vivienda> v = viviendaService.findById(id);
+
         if(viviendaService.findById(id).isEmpty())
             return ResponseEntity.notFound().build();
-       List<Interesa> listaInteresa= interesaService.allInteresaDeUnaVivienda(id);
-       interesaService.deleteAll(listaInteresa);
-       viviendaService.deleteById(id);
-        return ResponseEntity.ok().build();
+
+        if(v.isPresent()){
+            if(usuario.getRole().equals(UserRole.ADMIN) || v.get().getUsuario().getId().equals(usuario.getId())){
+                List<Interesa> listaInteresa= interesaService.allInteresaDeUnaVivienda(id);
+                interesaService.deleteAll(listaInteresa);
+                viviendaService.deleteById(id);
+                return ResponseEntity.noContent().build();
+            }
+        }
+       return ResponseEntity.badRequest().build();
     }
 
-
-
-    @DeleteMapping("/{id}/inmobiliaria")
-    public ResponseEntity<?> desasociarViviendaInmobiliaria (@PathVariable ("id") Long id){
+    @DeleteMapping("/{id}/inmobiliaria/")
+    public ResponseEntity<?> desasociarViviendaInmobiliaria (@PathVariable ("id") Long id, @AuthenticationPrincipal Usuario usuario){
         Optional<Vivienda> v = viviendaService.findById(id);
+
+        //No se como sacar el usuario gestor (Creo que faltaria en la url el id de la inmobiliaria)
         if (v.isEmpty())
             return ResponseEntity.notFound().build();
-        v.get().removeToInmobiliaria(v.get().getInmobiliaria());
-        viviendaService.edit(v.get());
-        return ResponseEntity.ok().build();
+
+        if(v.isPresent()){
+            if(usuario.getRole().equals(UserRole.ADMIN) || v.get().getUsuario().getId().equals(usuario.getId())){
+                v.get().removeToInmobiliaria(v.get().getInmobiliaria());
+                viviendaService.edit(v.get());
+                return ResponseEntity.ok().build();
+            }
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @Operation(summary = "Actualiza los datos de una vivienda")
@@ -381,15 +407,23 @@ public class ViviendaController {
                     content = @Content)
     })
     @PostMapping("/{id}/inmobiliaria/{id2}")
-    public ResponseEntity<?> asociarViviendaInmobiliaria (@PathVariable ("id") Long id1, @PathVariable("id2") Long id2){
+    public ResponseEntity<?> asociarViviendaInmobiliaria (@PathVariable ("id") Long id1, @PathVariable("id2") Long id2, @AuthenticationPrincipal Usuario usuario){
         Optional<Inmobiliaria> i=inmobiliariaService.findById(id2);
         Optional<Vivienda> v=viviendaService.findById(id1);
+
         if(i.isEmpty() || v.isEmpty())
             return ResponseEntity.notFound().build();
-        v.get().addToInmobiliaria(i.get());
-        viviendaService.edit(v.get());
-        inmobiliariaService.edit(i.get());
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        if(v.isPresent()) {
+            if (v.isPresent()) {
+                if (usuario.getRole().equals(UserRole.ADMIN) || v.get().getUsuario().getId().equals(usuario.getId())) {
+                    v.get().addToInmobiliaria(i.get());
+                    viviendaService.edit(v.get());
+                    inmobiliariaService.edit(i.get());
+                    return ResponseEntity.status(HttpStatus.CREATED).build();
+                }
+            }
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 }

@@ -87,18 +87,20 @@ public class InmobiliariaController {
                     content = @Content)
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removeInmo(@PathVariable Long id){
-        if (inmobiliariaService.findById(id).isEmpty()){
-            return ResponseEntity.notFound().build();
-        }else {
+    public ResponseEntity<?> removeInmo(@PathVariable Long id, @AuthenticationPrincipal Usuario usuario){
+        Optional<Inmobiliaria> inmo = inmobiliariaService.findById(id);
 
-            Inmobiliaria i = inmobiliariaService.findById(id).get();
-            //i.getViviendas().stream().map(v -> v.removeToInmobiliaria(i)).collect(Collectors.toList());
-
-            inmobiliariaService.delete(i);
-
-            return ResponseEntity.ok().build();
+        if(inmo.isPresent()) {
+                //if (usuario.getRole().equals(UserRole.ADMIN) || inmo.get().getGestores().forEach(x -> {
+                 //  x.getId().equals(usuario.getId());
+               // })) {
+                    inmobiliariaService.delete(inmo.get());
+                    return ResponseEntity.noContent().build();
+                //}
         }
+        if (inmobiliariaService.findById(id).isEmpty())
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
     }
 
     @Operation(summary = "Encontrar una inmobiliaria por la id")
@@ -149,7 +151,7 @@ public class InmobiliariaController {
         if(gestor.isPresent()){
             if(inmo.isPresent()){
 
-            if(usuario.getRole().equals(UserRole.ADMIN) || gestor.get().getId().equals(usuario.getId())){
+            if(usuario.getRole().equals(UserRole.ADMIN) || inmo.get().getId().equals(usuario.getInmobiliaria_prop().getId())){
                 return ResponseEntity.ok().body(inmo.get().getGestores());
             }
         }else
@@ -169,16 +171,16 @@ public class InmobiliariaController {
     })
     @DeleteMapping("/gestor/{id}")
     public ResponseEntity<?> DeleteGestor(@PathVariable UUID id, @AuthenticationPrincipal Usuario usuario) {
-        //Optional<Inmobiliaria> inmo = inmobiliariaService.findById(id);
-        //List<Usuario> gestores = null;
-        //if(inmo.get().getGestores().forEach(x -> x.getId().equals(usuario.getId()))){
-            // Para comprobar que el gestor logeado pertenece a esa inmobiliaria
-
-        if(usuarioService.findById(id).isEmpty()){
-            return ResponseEntity.notFound().build();
-        }else{
+        Optional<Inmobiliaria> inmo = inmobiliariaService.findById(usuario.getInmobiliaria_prop().getId());
+        List<Usuario> gestores = null;
+        if(usuario.getRole().equals(UserRole.ADMIN) || inmo.get().getId().equals(usuario.getInmobiliaria_prop().getId())){
             usuarioService.deleteById(id);
             return ResponseEntity.notFound().build();
+
         }
+        if(usuarioService.findById(id).isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 }
